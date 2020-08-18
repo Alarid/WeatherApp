@@ -1,0 +1,8 @@
+.city-infos .infos {
+  text-align: right;
+}
+
+.city-infos label {
+  font-weight: bold;
+  float: left;
+}
