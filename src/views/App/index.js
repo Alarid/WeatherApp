@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import FiveDaysForecasts from '../../components/FiveDaysForecasts/FiveDaysForecasts';
+
+import FiveDaysForecasts from '../FiveDaysForecasts';
 import './App.css';
 
 const App = () => (

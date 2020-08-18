@@ -3,17 +3,11 @@ import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import moment from 'moment';
+import SearchBar from '../../components/Filters/SearchBar';
+import CityInfos from '../../components/CityInfos/CityInfos';
+import DaysForecasts from '../../components/DaysForecasts/DaysForecasts';
 
-import SearchBar from '../Filters/SearchBar';
-import CityInfos from '../CityInfos/CityInfos';
-import DayForecasts from './DayForecasts';
-
-/**
- * City Weather container
- */
 class FiveDaysForecasts extends React.Component {
-
   // Constructor
   constructor(props) {
     super(props);
@@ -80,31 +74,6 @@ class FiveDaysForecasts extends React.Component {
       });
   }
 
-  // Builds a dictionnary (key = dayOfYear, value = forecast) and output its JSX render
-  getForecastsByDay() {
-    return this.state.forecasts.slice()
-      .reduce((days, forecast) => {
-        const date = moment.unix(forecast.dt);
-        const dayOfYear = date.dayOfYear().toString();
-        if (!days[dayOfYear]) {
-          days[dayOfYear] = {
-            title: +dayOfYear === moment().dayOfYear() ? "Today" : date.format('dddd'),
-            data: [],
-          };
-        }
-        days[dayOfYear].data.push(forecast);
-        return days;
-      }, [])
-      .flat()
-      .map(f => (
-        <Row key={f.title}>
-          <Col xs="12">
-            <DayForecasts title={f.title} data={f.data} />
-          </Col>
-        </Row>
-      ));
-  }
-
   // Render errors stored in state
   renderErrors() {
     return this.state.errors.map(err => (
@@ -140,10 +109,9 @@ class FiveDaysForecasts extends React.Component {
     )
   }
 
-  // Render the component
+  // Render the view
   render() {
     const errors = this.renderErrors();
-    const forecasts = this.getForecastsByDay();
     const cityInfos = this.renderCityInfos();
 
     return (
@@ -156,7 +124,10 @@ class FiveDaysForecasts extends React.Component {
 
         <Row className="mt-3">
           <Col xs="4"> {cityInfos} </Col>
-          <Col xs="8"> {forecasts} </Col>
+
+          <Col xs="8">
+            <DaysForecasts forecasts={this.state.forecasts} />
+          </Col>
         </Row>
       </React.Fragment>
     );
