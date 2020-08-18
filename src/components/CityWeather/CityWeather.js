@@ -61,7 +61,7 @@ class CityWeather extends React.Component {
           console.log(err);
         }
 
-        this.setState({errors: errors});
+        this.setState({errors: errors, city: null, forecasts: []});
       });
 
   }

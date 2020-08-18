@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
 import WeatherIcon from './WeatherIcon';
+import WeatherInfos from './WeatherInfos';
 
 // Card for an individual forefacst
 const HourForecast = (props) => {
@@ -15,12 +16,8 @@ const HourForecast = (props) => {
   return (
     <Card className="py-3 text-center mb-2 mr-2">
       <strong>{hour}</strong>
-      <WeatherIcon icon={weather.icon} center/>
-      <small>{weather.main}</small>
-      <div className="d-flex flex-row justify-content-center">
-        <span> {data.main.temp.toFixed(1)}C - &nbsp;</span>
-        <span className="text-info"> {data.main.humidity}% </span>
-      </div>
+      <WeatherIcon icon={weather.icon} desc={weather.description} center/>
+      <WeatherInfos data={data} center />
     </Card>
   );
 };
@@ -34,7 +31,7 @@ const Forecasts = (props) => {
   ))
 
   return (
-    <Card className="mb-3">
+    <Card className="mb-3 shadow-sm">
       <Card.Body>
         <Card.Title>{props.title}</Card.Title>
         <Row noGutters> {hours} </Row>
