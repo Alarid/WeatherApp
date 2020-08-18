@@ -1,16 +1,18 @@
 import React from 'react';
-import SearchBar from './SearchBar';
-import CityInfos from './CityInfos';
 import Alert from 'react-bootstrap/Alert';
-import Forecasts from './Forecasts';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 import moment from 'moment';
+
+import SearchBar from '../Filters/SearchBar';
+import CityInfos from '../CityInfos/CityInfos';
+import DayForecasts from './DayForecasts';
 
 /**
  * City Weather container
  */
-class CityWeather extends React.Component {
+class FiveDaysForecasts extends React.Component {
 
   // Constructor
   constructor(props) {
@@ -75,65 +77,90 @@ class CityWeather extends React.Component {
         this.setState({
           forecasts: data.list,
         });
-        // this.getForecastsByDay();
       });
   }
 
-  // Returns an dictionnary (key = dayOfYear, value = forecast)
+  // Builds a dictionnary (key = dayOfYear, value = forecast) and output its JSX render
   getForecastsByDay() {
-    return this.state.forecasts.slice().reduce((days, forecast) => {
-      const date = moment.unix(forecast.dt);
-      const dayOfYear = date.dayOfYear().toString();
-      if (!days[dayOfYear]) {
-        days[dayOfYear] = {
-          title: +dayOfYear === moment().dayOfYear() ? "Today" : date.format('dddd'),
-          data: [],
-        };
-      }
-      days[dayOfYear].data.push(forecast);
-      return days;
-    }, []).flat();
+    return this.state.forecasts.slice()
+      .reduce((days, forecast) => {
+        const date = moment.unix(forecast.dt);
+        const dayOfYear = date.dayOfYear().toString();
+        if (!days[dayOfYear]) {
+          days[dayOfYear] = {
+            title: +dayOfYear === moment().dayOfYear() ? "Today" : date.format('dddd'),
+            data: [],
+          };
+        }
+        days[dayOfYear].data.push(forecast);
+        return days;
+      }, [])
+      .flat()
+      .map(f => (
+        <Row key={f.title}>
+          <Col xs="12">
+            <DayForecasts title={f.title} data={f.data} />
+          </Col>
+        </Row>
+      ));
   }
 
-  // Render the component
-  render() {
-    const errors = this.state.errors.map(err => (
+  // Render errors stored in state
+  renderErrors() {
+    return this.state.errors.map(err => (
       <Alert variant="danger" dismissible key={err}>
         <Alert.Heading> {err.title} </Alert.Heading>
         {err.body}
       </Alert>
     ));
-
-    let forecasts = this.getForecastsByDay().map(f => (
-      <Row key={f.title}>
-        <Col xs="12">
-          <Forecasts title={f.title} data={f.data} />
-        </Col>
-      </Row>
-    ));
-
-    return (
-      <div className="city-weather">
-        <SearchBar
-          searchCity={this.searchCity.bind(this)}
-        />
-
-        <div className="errors my-3"> {errors} </div>
-
-        <Row className="mt-3">
-          <Col xs="4">
-            <CityInfos
-              city={this.state.city}/>
-          </Col>
-
-          <Col xs="8">
-            {forecasts}
-          </Col>
-        </Row>
-      </div>
-    );
   }
 
+  // Render city informations if there is a city in state
+  renderCityInfos() {
+    const city = this.state.city;
+    if (!city) {
+      return '';
+    }
+
+    const weatherInfos = {
+      weather: city.weather,
+      main: city.main,
+      wind: city.wind,
+    };
+
+    return (
+      <CityInfos
+        name={city.name}
+        lat={city.coord.lat}
+        lon={city.coord.lon}
+        country={city.sys.country}
+        sunrise={city.sys.sunrise}
+        sunset={city.sys.sunset}
+        weatherInfos={weatherInfos} />
+    )
+  }
+
+  // Render the component
+  render() {
+    const errors = this.renderErrors();
+    const forecasts = this.getForecastsByDay();
+    const cityInfos = this.renderCityInfos();
+
+    return (
+      <React.Fragment>
+        <SearchBar searchCity={this.searchCity.bind(this)} />
+
+        <div className="errors my-3">
+          {errors}
+        </div>
+
+        <Row className="mt-3">
+          <Col xs="4"> {cityInfos} </Col>
+          <Col xs="8"> {forecasts} </Col>
+        </Row>
+      </React.Fragment>
+    );
+  }
 }
 
-export default CityWeather;
+export default FiveDaysForecasts;

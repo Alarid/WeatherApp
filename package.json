@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.2",
     "country-data-list": "^1.2.0",
+    "d3-array": "^2.5.1",
     "moment": "^2.27.0",
     "numeral": "^2.0.6",
     "react": "^16.13.1",

@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import CityWeather from '../CityWeather/CityWeather';
+import FiveDaysForecasts from '../../components/FiveDaysForecasts/FiveDaysForecasts';
 import './App.css';
 
 const App = () => (
@@ -13,7 +13,7 @@ const App = () => (
     </div>
 
     <Container className="content bg-white mt-3 p-3 rounded">
-      <CityWeather/>
+      <FiveDaysForecasts/>
     </Container>
   </React.Fragment>
 );

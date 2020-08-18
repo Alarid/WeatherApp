@@ -3,7 +3,7 @@ import windImg from './wind.png';
 
 // Display information on a particular forecast (temperature, humidity, wind, ..)
 const WeatherInfos = (props) => {
-  const data = props.data;
+  const data = props.infos;
   const weather = data.weather.slice().pop();
 
   let className = 'd-flex flex-column';

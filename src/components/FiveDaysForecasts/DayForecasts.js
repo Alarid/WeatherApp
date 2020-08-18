@@ -2,9 +2,12 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 import moment from 'moment';
-import WeatherIcon from './WeatherIcon';
-import WeatherInfos from './WeatherInfos';
+
+import WeatherIcon from '../Weather/WeatherIcon';
+import WeatherInfos from '../Weather/WeatherInfos';
+
 
 // Card for an individual forefacst
 const HourForecast = (props) => {
@@ -12,18 +15,23 @@ const HourForecast = (props) => {
   const data = props.data;
   const weather = data.weather.slice().pop();
   const hour = moment.unix(data.dt).format('HH:mm A');
+  const infos = {
+    weather: data.weather,
+    main: data.main,
+    wind: data.wind,
+  };
 
   return (
     <Card className="py-3 text-center mb-2 mr-2">
       <strong>{hour}</strong>
       <WeatherIcon icon={weather.icon} desc={weather.description} center/>
-      <WeatherInfos data={data} center />
+      <WeatherInfos infos={infos} center />
     </Card>
   );
 };
 
 // Displays forecasts for a day
-const Forecasts = (props) => {
+const DayForecasts = (props) => {
   const hours = props.data.map(data => (
     <Col xs="2" key={data.dt}>
       <HourForecast data={data} />
@@ -40,4 +48,4 @@ const Forecasts = (props) => {
   )
 }
 
-export default Forecasts;
+export default DayForecasts;
