@@ -1,11 +1,9 @@
 import React from 'react';
 import windImg from './wind.png';
+import PropTypes from 'prop-types';
 
 // Display information on a particular forecast (temperature, humidity, wind, ..)
-const WeatherInfos = (props) => {
-  const data = props.infos;
-  const weather = data.weather.slice().pop();
-
+export const WeatherInfos = ({weather, temp, humidity, wind, ...props}) => {
   let className = 'd-flex flex-column';
   if (props.center)
     className += ' justify-content-center';
@@ -15,17 +13,22 @@ const WeatherInfos = (props) => {
 
   return (
     <div className={className}>
-      <small>{weather.main}</small>
+      <small>{weather}</small>
       <div className="flex-row">
-        <span> {data.main.temp.toFixed(1)}C - &nbsp;</span>
-        <span className="text-info"> {data.main.humidity}% </span>
+        <span> {temp.toFixed(1)}C - &nbsp;</span>
+        <span className="text-info"> {humidity}% </span>
       </div>
       <div className="flex-row">
         <img src={windImg} alt="wind" title="wind" width="16" height="16" className="mr-1"/>
-        <small>{data.wind.speed} m/s</small>
+        <small>{wind} m/s</small>
       </div>
     </div>
   );
 }
 
-export default WeatherInfos;
+WeatherInfos.propTypes = {
+  weather: PropTypes.string,
+  temp: PropTypes.number,
+  humidity: PropTypes.number,
+  wind: PropTypes.number,
+}

@@ -9,8 +9,8 @@ import DayForecasts from './DayForecasts';
 /**
  * Forecasts for 5 days
  */
-const DaysForecasts = (props) => (
-  props.forecasts.slice()
+const DaysForecasts = ({forecasts, ...props}) => (
+  forecasts.slice()
     .reduce((days, forecast) => {
       const date = moment.unix(forecast.dt);
       const dayOfYear = date.dayOfYear().toString();
