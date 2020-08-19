@@ -3,9 +3,9 @@ import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import SearchBar from '../../components/Filters/SearchBar';
-import CityInfos from '../../components/CityInfos/CityInfos';
-import DaysForecasts from '../../components/DaysForecasts/DaysForecasts';
+import SearchBar from '../components/Filters/SearchBar';
+import CityInfos from '../components/CityInfos/CityInfos';
+import DaysForecasts from '../components/DaysForecasts/DaysForecasts';
 
 class FiveDaysForecasts extends React.Component {
   // Constructor
@@ -15,6 +15,7 @@ class FiveDaysForecasts extends React.Component {
       city: null,
       forecasts: [],
       errors: [],
+      loading: false,
     }
     this.API_URL = 'https://api.openweathermap.org/data/2.5';
     this.API_KEY = 'df2559d034397d56f781912295987543';
@@ -27,11 +28,14 @@ class FiveDaysForecasts extends React.Component {
 
   // Search weather forecast for a city by name
   searchCity(name) {
-    // Clean previous errors
-    this.setState({errors: []});
+    // Clean previous errors and set loading to true
+    this.setState({
+      errors: [],
+      loading: true,
+    });
 
     // fetch data
-    fetch(`${this.API_URL}/weather?q=${name}&units=metric&appid=${this.API_KEY}`)
+    return fetch(`${this.API_URL}/weather?q=${name}&units=metric&appid=${this.API_KEY}`)
       .then(response => {
         if (!response.ok) {
           throw Error(response.status);
@@ -40,7 +44,7 @@ class FiveDaysForecasts extends React.Component {
       })
       .then(data => {
         this.setState({city: data});
-        this.fetchForecast(data.id);
+        return this.fetchForecast(data.id);
       })
       // Error handling
       .catch(err => {
@@ -57,7 +61,12 @@ class FiveDaysForecasts extends React.Component {
           console.log(err);
         }
 
-        this.setState({errors: errors, city: null, forecasts: []});
+        this.setState({
+          errors: errors,
+          city: null,
+          forecasts: [],
+          loading: false,
+        });
       });
 
   }
@@ -70,6 +79,7 @@ class FiveDaysForecasts extends React.Component {
         // Save data in state
         this.setState({
           forecasts: data.list,
+          loading: false, // loading is finished
         });
       });
   }
@@ -116,7 +126,9 @@ class FiveDaysForecasts extends React.Component {
 
     return (
       <React.Fragment>
-        <SearchBar searchCity={this.searchCity.bind(this)} />
+        <SearchBar
+          loading={this.state.loading}
+          searchCity={this.searchCity.bind(this)} />
 
         <div className="errors my-3">
           {errors}

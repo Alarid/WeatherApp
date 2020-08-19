@@ -1,35 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-class SearchBar extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.cityName = React.createRef();
-  }
+export default function SearchBar({ searchCity, loading }) {
+  const [cityName, setCityName] = useState('');
 
-  search(e) {
+  const search = (e) => {
     e.preventDefault();
-    this.props.searchCity(this.cityName.current.value);
-  }
+    searchCity(cityName);
+  };
 
-  render() {
-    return (
-      <Form inline onSubmit={this.search.bind(this)}>
-        <Form.Control
-          type="search"
-          placeholder="City name"
-          className="mr-2"
-          ref={this.cityName}/>
+  return (
+    <Form inline onSubmit={search}>
+      <Form.Control
+        type="search"
+        placeholder="City name"
+        className="mr-2"
+        onChange={(e) => { setCityName(e.target.value) }}/>
 
-        <Button
-          type="submit">
-            Search
-        </Button>
-      </Form>
-    );
-  }
+      <Button
+        type="submit"
+        disabled={loading}>
+          { loading ? 'Searching...' : 'Search' }
+      </Button>
+    </Form>
+  );
 }
 
-export default SearchBar;
+
+SearchBar.propTypes = {
+  searchCity: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+};
+
+SearchBar.defaultProps = {
+  loading: false,
+}

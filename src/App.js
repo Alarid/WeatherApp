@@ -2,7 +2,7 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 
 import './App.css';
-import FiveDaysForecasts from '../FiveDaysForecasts';
+import FiveDaysForecasts from './screens/FiveDaysForecastsScreen';
 
 const App = () => (
   <React.Fragment>
