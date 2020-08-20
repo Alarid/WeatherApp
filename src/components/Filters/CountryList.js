@@ -7,7 +7,7 @@ export default function CountryList({selectCountry}) {
     .filter(country => country.status === 'assigned')
     .map(country => ({
       code: country.alpha2,
-      name: country.name,
+      name: `${country.emoji} ${country.name}`,
     }));
 
   return (
