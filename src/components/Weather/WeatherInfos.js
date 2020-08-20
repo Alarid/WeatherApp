@@ -3,11 +3,11 @@ import windImg from './wind.png';
 import PropTypes from 'prop-types';
 
 // Display information on a particular forecast (temperature, humidity, wind, ..)
-export const WeatherInfos = ({weather, temp, humidity, wind, ...props}) => {
+export default function WeatherInfos ({weather, temp, humidity, wind, center, marginTop}) {
   let className = 'd-flex flex-column';
-  if (props.center)
-    className += ' justify-content-center';
-  if (props.marginTop) {
+  if (center)
+    className += ' text-center';
+  if (marginTop) {
     className += ' mt-3';
   }
 
@@ -27,8 +27,15 @@ export const WeatherInfos = ({weather, temp, humidity, wind, ...props}) => {
 }
 
 WeatherInfos.propTypes = {
-  weather: PropTypes.string,
-  temp: PropTypes.number,
-  humidity: PropTypes.number,
-  wind: PropTypes.number,
+  weather: PropTypes.string.isRequired,
+  temp: PropTypes.number.isRequired,
+  humidity: PropTypes.number.isRequired,
+  wind: PropTypes.number.isRequired,
+  center: PropTypes.bool,
+  marginTop: PropTypes.bool,
+}
+
+WeatherInfos.defaultProps = {
+  center: false,
+  marginTop: false,
 }

@@ -1,28 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import moment from 'moment';
-
 import DayForecasts from './DayForecasts';
+import { forecastsByDays } from '../../utils/forecasts';
 
 /**
  * Forecasts for 5 days
  */
-const DaysForecasts = ({forecasts, ...props}) => (
-  forecasts.slice()
-    .reduce((days, forecast) => {
-      const date = moment.unix(forecast.dt);
-      const dayOfYear = date.dayOfYear().toString();
-      if (!days[dayOfYear]) {
-        days[dayOfYear] = {
-          title: +dayOfYear === moment().dayOfYear() ? "Today" : date.format('dddd'),
-          data: [],
-        };
-      }
-      days[dayOfYear].data.push(forecast);
-      return days;
-    }, [])
+export default function DaysForecasts({forecasts}) {
+  return forecastsByDays(forecasts)
     .flat()
     .map(f => (
       <Row key={f.title}>
@@ -30,7 +19,9 @@ const DaysForecasts = ({forecasts, ...props}) => (
           <DayForecasts title={f.title} data={f.data} />
         </Col>
       </Row>
-    ))
-);
+    ));
+}
 
-export default DaysForecasts;
+DaysForecasts.propTypes = {
+  forecasts: PropTypes.array.isRequired,
+}

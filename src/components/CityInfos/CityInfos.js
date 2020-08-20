@@ -7,7 +7,7 @@ import moment from 'moment';
 import { countries } from 'country-data-list';
 
 import WeatherIcon from '../Weather/WeatherIcon';
-import { WeatherInfos } from '../Weather/WeatherInfos';
+import WeatherInfos from '../Weather/WeatherInfos';
 
 import './city-infos.css';
 
@@ -44,36 +44,34 @@ const Weather = ({weather, main, wind, ...props}) => {
  * CityInfos
  * Display informations about a city
  */
-const CityInfos = ({name, lat, lon, country, sunrise, sunset, weatherInfos, ...props}) => (
-  <Card className="city-infos shadow-sm">
-    <Card.Body className="pb-0">
-      <Card.Title>{name}</Card.Title>
+export default function CityInfos({name, lat, lon, country, sunrise, sunset, weatherInfos, ...props}) {
+  return (
+    <Card className="city-infos shadow-sm">
+      <Card.Body className="pb-0">
+        <Card.Title>{name}</Card.Title>
 
-      <Card.Subtitle className="mb-2 text-muted">
-        Lat: {lat}, Lon: {lon}
-      </Card.Subtitle>
+        <Card.Subtitle className="mb-2 text-muted">
+          Lat: {lat}, Lon: {lon}
+        </Card.Subtitle>
 
-      <Weather
-        weather={weatherInfos.weather}
-        main={weatherInfos.main}
-        wind={weatherInfos.wind}/>
-    </Card.Body>
-    <ListGroup className="list-group-flush infos">
-      <ListGroup.Item>
-        <label>Country</label> {renderCountry(country)}
-      </ListGroup.Item>
+        <Weather
+          weather={weatherInfos.weather}
+          main={weatherInfos.main}
+          wind={weatherInfos.wind}/>
+      </Card.Body>
+      <ListGroup className="list-group-flush infos">
+        <ListGroup.Item>
+          <label>Country</label> {renderCountry(country)}
+        </ListGroup.Item>
 
-      <ListGroup.Item>
-        <label>Sunrise</label> {renderTimestamp(sunrise)}
-      </ListGroup.Item>
+        <ListGroup.Item>
+          <label>Sunrise</label> {renderTimestamp(sunrise)}
+        </ListGroup.Item>
 
-      <ListGroup.Item>
-        <label>Sunset</label> {renderTimestamp(sunset)} 
-      </ListGroup.Item>
-    </ListGroup>
-  </Card>
-);
-
-
-
-export default CityInfos;
+        <ListGroup.Item>
+          <label>Sunset</label> {renderTimestamp(sunset)} 
+        </ListGroup.Item>
+      </ListGroup>
+    </Card>
+  );
+}

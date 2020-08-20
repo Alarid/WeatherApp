@@ -1,16 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
-const WeatherIcon = (props) => {
-  const weatherIconSrc = `https://openweathermap.org/img/wn/${props.icon}@2x.png`;
+export default function WeatherIcon({ icon, desc, center }) {
+  const weatherIconSrc = `https://openweathermap.org/img/wn/${icon}@2x.png`;
   return (
     <img
       src={weatherIconSrc}
       alt="weather icon"
-      title={props.desc}
+      title={desc}
       width="100"
       height="100"
-      className={props.center ? 'mx-auto' : ''} />
+      className={center ? 'd-block mx-auto' : ''} />
   );
 }
 
-export default WeatherIcon;
+WeatherIcon.propTypes = {
+  icon: PropTypes.string.isRequired,
+  desc: PropTypes.string.isRequired,
+  center: PropTypes.bool,
+};
+
+WeatherIcon.defaultProps = {
+  center: false,
+}
