@@ -9,7 +9,7 @@ const App = () => (
     <div className="header text-white shadow-lg py-3 w-100">
       <Container>
         <h1>Weather App</h1>
-        <h5>5 Days / 3 Hours Forecast</h5>
+        <h5>3 hours / hourly forecasts for a city</h5>
       </Container>
     </div>
 

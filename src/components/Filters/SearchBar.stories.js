@@ -10,12 +10,33 @@ export default {
 
 const actionsData = {
   searchCity: action('searchCity'),
+  setCityName: action('setCityName'),
+  setCountry: action('setCountry'),
+  setMode: action('setMode'),
 }
 
+const searchBarData = {
+  loading: false,
+  loaded: false,
+  mode: '3hours',
+};
+
 export const Default = () => (
-  <SearchBar {...actionsData} />
+  <SearchBar {...searchBarData} {...actionsData} />
 );
 
 export const Loading = () => (
-  <SearchBar loading={true} {...actionsData} />
+  <SearchBar
+    {...searchBarData}
+    loading={true}
+    {...actionsData}
+  />
 );
+
+export const Loaded = () => (
+  <SearchBar
+    {...searchBarData}
+    loaded={true}
+    {...actionsData}
+  />
+)

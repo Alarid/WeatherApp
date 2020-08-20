@@ -16,18 +16,48 @@ class FiveDaysForecasts extends React.Component {
       forecasts: [],
       errors: [],
       loading: false,
+      search: {
+        cityName: '',
+        country: null,
+        mode: '3hours',
+      }
     }
     this.API_URL = 'https://api.openweathermap.org/data/2.5';
     this.API_KEY = 'df2559d034397d56f781912295987543';
   }
 
-  // Component did mount
-  componentDidMount() {
-    this.searchCity('London');
+  // Change city name from search bar
+  setCityName(val) {
+    this.setState({
+      search: {
+        ...this.state.search,
+        cityName: val,
+      }
+    });
+  }
+
+  // Change country from search bar
+  setCountry(val) {
+    this.setState({
+      search: {
+        ...this.state.search,
+        country: val.length > 0 ? val[0] : null,
+      }
+    });
+  }
+
+  // Change search mode from search bar
+  setMode(mode) {
+    this.setState({
+      search: {
+        ...this.state.search,
+        mode: mode,
+      }
+    }, () => { this.searchCity() });
   }
 
   // Search weather forecast for a city by name
-  searchCity(name, code) {
+  searchCity() {
     // Clean previous errors and set loading to true
     this.setState({
       errors: [],
@@ -35,7 +65,10 @@ class FiveDaysForecasts extends React.Component {
     });
 
     // fetch data
-    const q = name + (code !== null ? `,${code}` : '');
+    const cityName = this.state.search.cityName;
+    const searchMode = this.state.search.mode;
+    const country = this.state.search.country;
+    const q = this.state.search.cityName + (country !== null ? `,${country.code}` : '');
     return fetch(`${this.API_URL}/weather?q=${q}&units=metric&appid=${this.API_KEY}`)
       .then(response => {
         if (!response.ok) {
@@ -45,16 +78,23 @@ class FiveDaysForecasts extends React.Component {
       })
       .then(data => {
         this.setState({city: data});
-        return this.fetchForecast(data.id);
+        if (searchMode === '3hours') {
+          return this.fetchForecast(data.id);
+        }
+        else if (searchMode === 'hourly') {
+          return this.fetchHourly(data.coord.lat, data.coord.lon);
+        }
       })
       // Error handling
       .catch(err => {
         const errors = this.state.errors.slice();
         if (err.message === "404") {
+          const country = this.state.search.country;
+          const inCountry = (country !== null ? ` in ${country.name}` : '');
           errors.push({
             title: 'Not found',
             body: (
-              <p>The city <strong>{name}</strong> could not be found. Wrong spelling, maybe ?</p>
+              <p>The city <strong>{cityName}</strong> could not be found{inCountry}. Wrong spelling, maybe ?</p>
             ),
           });
         }
@@ -69,7 +109,6 @@ class FiveDaysForecasts extends React.Component {
           loading: false,
         });
       });
-
   }
 
   // Fetch the 5 day forecast for city <id>
@@ -81,6 +120,29 @@ class FiveDaysForecasts extends React.Component {
         this.setState({
           forecasts: data.list,
           loading: false, // loading is finished
+        });
+      });
+  }
+
+  // Fetch the hourly forecast
+  fetchHourly(lat, lon) {
+    return fetch(`${this.API_URL}/onecall?lat=${lat}&lon=${lon}&appid=${this.API_KEY}`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          // Reponse is formatted a bit differently than the 3 hours forecast
+          forecasts: data.hourly.map(f => ({
+            dt: f.dt,
+            main: {
+              temp: f.temp,
+              humidity: f.humidity,
+            },
+            weather: f.weather,
+            wind: {
+              speed: f.wind_speed,
+            },
+          })),
+          loading: false,
         });
       });
   }
@@ -129,7 +191,14 @@ class FiveDaysForecasts extends React.Component {
       <React.Fragment>
         <SearchBar
           loading={this.state.loading}
-          searchCity={this.searchCity.bind(this)} />
+          loaded={this.state.forecasts.length > 0}
+          country={this.state.search.country}
+          mode={this.state.search.mode}
+          searchCity={this.searchCity.bind(this)}
+          setCityName={this.setCityName.bind(this)}
+          setCountry={this.setCountry.bind(this)}
+          setMode={this.setMode.bind(this)}
+        />
 
         <div className="errors my-3">
           {errors}
