@@ -27,7 +27,7 @@ class FiveDaysForecasts extends React.Component {
   }
 
   // Search weather forecast for a city by name
-  searchCity(name) {
+  searchCity(name, code) {
     // Clean previous errors and set loading to true
     this.setState({
       errors: [],
@@ -35,7 +35,8 @@ class FiveDaysForecasts extends React.Component {
     });
 
     // fetch data
-    return fetch(`${this.API_URL}/weather?q=${name}&units=metric&appid=${this.API_KEY}`)
+    const q = name + (code !== null ? `,${code}` : '');
+    return fetch(`${this.API_URL}/weather?q=${q}&units=metric&appid=${this.API_KEY}`)
       .then(response => {
         if (!response.ok) {
           throw Error(response.status);

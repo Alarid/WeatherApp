@@ -14,7 +14,7 @@ export default {
 const data = forecastsByDays(forecasts);
 const today = data[Object.keys(data)[0]];
 const anotherDay = data[Object.keys(data)[1]];
-console.log(today);
+
 export const CurrentDay = () => (
   <DayForecast title="Today" data={today.data} />
 );

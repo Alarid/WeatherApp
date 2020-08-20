@@ -5,7 +5,7 @@ import SearchBar from './SearchBar';
 
 export default {
   component: SearchBar,
-  title: 'Search Bar',
+  title: 'Filters/Search Bar',
 };
 
 const actionsData = {

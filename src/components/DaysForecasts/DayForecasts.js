@@ -11,7 +11,7 @@ export default function DayForecasts({title, data}) {
   const hours = data
     .filter(data => data.weather.length > 0)
     .map(data => (
-      <Col xs="2" key={data.dt}>
+      <Col xs="3" key={data.dt}>
         <HourForecast
           dt={data.dt}
           weather={data.weather.slice().pop()}
