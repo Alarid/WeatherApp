@@ -22,8 +22,7 @@ class FiveDaysForecasts extends React.Component {
         mode: '3hours',
       }
     }
-    this.API_URL = 'https://api.openweathermap.org/data/2.5';
-    this.API_KEY = 'df2559d034397d56f781912295987543';
+    this.API_URL = 'http://localhost:3000/api/v1/';
   }
 
   // Change city name from search bar
@@ -66,10 +65,9 @@ class FiveDaysForecasts extends React.Component {
 
     // fetch data
     const cityName = this.state.search.cityName;
-    const searchMode = this.state.search.mode;
-    const country = this.state.search.country;
-    const q = this.state.search.cityName + (country !== null ? `,${country.code}` : '');
-    return fetch(`${this.API_URL}/weather?q=${q}&units=metric&appid=${this.API_KEY}`)
+    let country = this.state.search.country;
+    country = country ? `,${country.code}` : '';
+    return fetch(`${this.API_URL}/weather?city=${cityName}${country}`)
       .then(response => {
         if (!response.ok) {
           throw Error(response.status);
@@ -77,6 +75,7 @@ class FiveDaysForecasts extends React.Component {
         return response.json();
       })
       .then(data => {
+        const searchMode = this.state.search.mode;
         this.setState({city: data});
         if (searchMode === '3hours') {
           return this.fetchForecast(data.id);
@@ -113,7 +112,7 @@ class FiveDaysForecasts extends React.Component {
 
   // Fetch the 5 day forecast for city <id>
   fetchForecast(id) {
-    return fetch(`${this.API_URL}/forecast?id=${id}&units=metric&appid=${this.API_KEY}`)
+    return fetch(`${this.API_URL}/forecast?id=${id}`)
       .then(response => response.json())
       .then(data => {
         // Save data in state
@@ -126,7 +125,7 @@ class FiveDaysForecasts extends React.Component {
 
   // Fetch the hourly forecast
   fetchHourly(lat, lon) {
-    return fetch(`${this.API_URL}/onecall?lat=${lat}&lon=${lon}&appid=${this.API_KEY}`)
+    return fetch(`${this.API_URL}/onecall?lat=${lat}&lon=${lon}`)
       .then(response => response.json())
       .then(data => {
         this.setState({

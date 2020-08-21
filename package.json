@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://alarid.github.io/WeatherApp",
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@storybook/addon-knobs": "^6.0.13",
     "@testing-library/jest-dom": "^4.2.4",
