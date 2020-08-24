@@ -22,7 +22,8 @@ class FiveDaysForecasts extends React.Component {
         mode: '3hours',
       }
     }
-    this.API_URL = 'http://localhost:3000/api/v1/';
+    const base_url = process.env.REACT_APP_API_ENDPOINT || "https://frozen-caverns-00730.herokuapp.com";
+    this.API_URL = `${base_url}/api/v1`;
   }
 
   // Change city name from search bar
