@@ -6,6 +6,11 @@ Choose a city, specify a country (in case your city is in more than one country)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Automated Travis integration for deployment to [Github Pages](https://alarid.github.io/WeatherApp/).
+
+Linked to a [Node JS server](https://github.com/Alarid/WeatherApp-Server) deployed with [Heroku](https://heroku.com), in charge of fetching the forecasts from the API.
+
+
 ![screenshot](./public/screenshot.png)
 
 
